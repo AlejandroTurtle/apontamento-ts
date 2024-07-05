@@ -14,10 +14,17 @@
     "@types/node": "^16.18.98",
     "@types/react": "^18.3.3",
     "@types/react-dom": "^18.3.0",
+    "axios": "^1.7.2",
     "framer-motion": "^5.6.0",
+    "jquery": "^3.7.1",
+    "jquery-ui-dist": "^1.13.3",
+    "modal": "^1.2.0",
+    "moment": "^2.30.1",
     "react": "^18.3.1",
+    "react-big-calendar": "^1.13.0",
     "react-calendar": "^5.0.0",
     "react-dom": "^18.3.1",
+    "react-hook-form": "^7.51.5",
     "react-icons": "^5.2.1",
     "react-router-dom": "^6.23.1",
     "react-scripts": "5.0.1",
@@ -47,5 +54,10 @@
       "last 1 firefox version",
       "last 1 safari version"
     ]
+  },
+  "devDependencies": {
+    "@types/jquery": "^3.5.30",
+    "@types/jqueryui": "^1.12.23",
+    "@types/react-big-calendar": "^1.8.9"
   }
 }
