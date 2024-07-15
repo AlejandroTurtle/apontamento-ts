@@ -86,7 +86,7 @@ export const Card = () => {
               >
                 <ModalOverlay />
                 <ModalContent>
-                  <ModalHeader>Settings</ModalHeader>
+                  <ModalHeader>Configurações</ModalHeader>
                   <ModalCloseButton />
                   <ModalBody>
                   <FormControl display='flex' alignItems='center'>
@@ -98,7 +98,7 @@ export const Card = () => {
                   </ModalBody>
                   <ModalFooter>
                     <Button colorScheme="blue" mr={3} onClick={onClose}>
-                      Close
+                      Fechar
                     </Button>
                   </ModalFooter>
                 </ModalContent>

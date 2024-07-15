@@ -11,6 +11,7 @@ const Register: React.FC = () => {
   const [name, setName] = useState("");
   const [email, setEmail] = useState("");
   const [password, setPassword] = useState("");
+  const [emailExists, setEmailExists] = useState("");
   const navigate = useNavigate();
 
   const handleSubmit = async (e: React.FormEvent) => {
@@ -23,8 +24,11 @@ const Register: React.FC = () => {
       });
       navigate("/");
       console.log(response.data);
-    } catch (error) {
-      console.error("Erro ao registrar", error);
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        setEmailExists("Já existe um email igual a este cadastrado");
+        alert("Já existe um email igual a este cadastrado");
+      }
     }
   };
 
@@ -63,8 +67,9 @@ const Register: React.FC = () => {
                 placeholder="Senha"
                 required
               />
-              <Button colorScheme="blue" type="submit">Register</Button>
+              <Button colorScheme="blue" type="submit">Cadastrar</Button>
               <Text>Já tem uma conta? <Link color="blue.500" href="/">Login</Link></Text>
+              {emailExists && <Text color="red.500">{emailExists}</Text>}
             </VStack>
           </FormControl>
           </form>

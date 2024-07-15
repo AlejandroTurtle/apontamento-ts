@@ -37,8 +37,8 @@ const Login: React.FC = () => {
               <Text fontSize="lg">Digite seu email</Text>
               <Input border={'2px'} borderColor={'#6da8e3'} type="email" value={email} onChange={(e) => setEmail(e.target.value)} placeholder="Email" required />
               <Text  fontSize="lg">Digite sua senha</Text>
-              <Input border={'2px'} borderColor={'#6da8e3'} type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Password" required />
-              <Button colorScheme="blue" type="submit">Login</Button>
+              <Input border={'2px'} borderColor={'#6da8e3'} type="password" value={password} onChange={(e) => setPassword(e.target.value)} placeholder="Senha" required />
+              <Button colorScheme="blue" type="submit">Entrar</Button>
               <Text>Ainda não tem uma conta? <Link color="blue.500" href="/register">Registrar</Link></Text>
               {emailExists &&  <Text color="red">{emailExists}s</Text>}
             </VStack>

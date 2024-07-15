@@ -1,4 +1,4 @@
-import React from "react";
+import React, { useState } from "react";
 import Calendario from "./Calendario";
 import {
   Box,
@@ -21,6 +21,8 @@ import {
 import "react-calendar/dist/Calendar.css";
 import { useForm, SubmitHandler } from "react-hook-form";
 import axios from "axios";
+import { ToastContainer, toast } from "react-toastify";
+import "react-toastify/dist/ReactToastify.css";
 
 interface FormValues {
   data: string;
@@ -42,6 +44,8 @@ const Apontamento: React.FC = () => {
   const { isOpen, onOpen, onClose } = useDisclosure();
   const initialRef = React.useRef<HTMLInputElement | null>(null);
   const finalRef = React.useRef<HTMLInputElement | null>(null);
+  const [refresh, setRefresh] = useState(false);
+  const [apontamentoExists, setApontamentoExists] = useState("");
 
   const validaSaida = (value: string) => {
     const { entrada } = getValues();
@@ -94,18 +98,24 @@ const Apontamento: React.FC = () => {
   const onSubmit: SubmitHandler<FormValues> = async (forma) => {
     try {
       const token = localStorage.getItem('token');
-    const config = {
-      headers: { Authorization: `Bearer ${token}` }
-    };
+      const config = {
+        headers: { Authorization: `Bearer ${token}` }
+      };
 
       const response = await axios.post("http://localhost:5000/api/apontamento", forma, config);
+      setRefresh(prev => !prev); // Atualiza o estado para forçar a atualização do Calendario
       onClose();
       reset();
-    } catch (error) {
+    } catch (error: any) {
+      if (error.response.status === 400) {
+        setApontamentoExists(error.response.data.message);
+        notify();
+      }
       console.error("Erro ao enviar dados:", error);
     }
   };
-  
+
+  const notify = () => toast.error(apontamentoExists);
 
   return (
     <>
@@ -118,7 +128,7 @@ const Apontamento: React.FC = () => {
       </Box>
       <Center>
         <Box w="full" maxW="1200px" textAlign="left">
-          <Calendario />
+          <Calendario refresh={refresh} />
         </Box>
       </Center>
 
@@ -178,6 +188,8 @@ const Apontamento: React.FC = () => {
           </ModalContent>
         </Modal>
       )}
+
+      <ToastContainer />
     </>
   );
 }
