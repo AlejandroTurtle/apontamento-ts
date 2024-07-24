@@ -1,14 +1,31 @@
-// authService.js
-import axios from 'axios';
+import { createContext, useEffect, useState } from "react"
+import { getAllLocalStorage } from "../services/storage"
 
-const API_URL = 'http://localhost:5000/api';
+interface IAppContext {
 
-const logout = () => {
-  return axios.post(`${API_URL}/logout`).then((response) => {
-    if (response.status === 200) {
-      localStorage.removeItem('user'); // Remova o token do local storage
-    }
-  });
-};
+    isLoggedIn: boolean
+    setisLoggedIn: (isLoggedIn: boolean) => void
+  }
+   export const AppContext = createContext({} as IAppContext)
+   export const AppContextProvider = ({children}: any) => {
+    const [ isLoggedIn , setisLoggedIn] = useState<boolean>(false)
 
-export {logout}
+
+
+    useEffect(() => {
+      const storage = getAllLocalStorage()
+      if(storage){
+        const { login } = JSON.parse(storage)
+        setisLoggedIn(login)
+      }
+    }, [])
+
+   
+
+
+    return(
+      <AppContext.Provider value={{isLoggedIn, setisLoggedIn}}>
+        {children}
+      </AppContext.Provider>
+    )
+  }

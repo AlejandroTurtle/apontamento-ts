@@ -103,7 +103,7 @@ const Apontamento: React.FC = () => {
       };
 
       const response = await axios.post("http://localhost:5000/api/apontamento", forma, config);
-      setRefresh(prev => !prev); // Atualiza o estado para forçar a atualização do Calendario
+      setRefresh(prev => !prev); 
       onClose();
       reset();
     } catch (error: any) {
@@ -163,7 +163,7 @@ const Apontamento: React.FC = () => {
 
                 <FormControl mt={4} isInvalid={!!errors.saida} isRequired>
                   <FormLabel>Saída</FormLabel>
-                  <Input type="time" placeholder="saída" {...register("saida", { required: "Campo obrigatório", validate: validaSaida })} />
+                  <Input type="time" placeholder="saída" {...register("saida", { required: "Campo obrigatório", validate: validaSaida  })} />
                   <FormErrorMessage>
                     {errors.saida && errors.saida.message}
                   </FormErrorMessage>

@@ -2,19 +2,13 @@ import React, { useEffect, useState } from 'react';
 import $ from 'jquery';
 import 'jquery-ui-dist/jquery-ui.css';
 import 'jquery-ui-dist/jquery-ui.js';
-import './Calendar.css'; // Estilos personalizados aqui
+import './Calendar.css'; 
 import {
   Box,
   Button,
-  Card,
-  CardBody,
-  CardHeader,
   Center,
   Heading,
   Input,
-  Stack,
-  StackDivider,
-  Text,
   Modal,
   ModalOverlay,
   ModalContent,
@@ -27,11 +21,15 @@ import {
   FormLabel,
   Textarea,
   Icon,
+  Table,
+  Thead,
+  Tbody,
+  Tr,
+  Th,
+  Td,
 } from '@chakra-ui/react';
 import axios from 'axios';
 import { FaEdit, FaTrash } from "react-icons/fa";
-
-
 
 interface CalendarioProps {
   refresh: boolean;
@@ -46,8 +44,8 @@ interface Apontamento {
 }
 
 const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
-  const [data, setData] = useState<Apontamento[]>([]); // Inicializa com um array vazio
-  const [selectedDate, setSelectedDate] = useState<string | null>(null); // Estado para a data selecionada
+  const [data, setData] = useState<Apontamento[]>([]);
+  const [selectedDate, setSelectedDate] = useState<string | null>(null); 
   const [editApontamento, setEditApontamento] = useState<Apontamento | null>(null);
   const [editFormData, setEditFormData] = useState<{ data: string; entrada: string; saida: string; atividade: string }>({
     data: '',
@@ -61,10 +59,9 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
   const { isOpen, onOpen, onClose } = useDisclosure();
 
   useEffect(() => {
-    // Configuração do datepicker usando jQuery
     $("#datepicker").datepicker({
       onSelect: function (dateText) {
-        setSelectedDate(dateText); // Atualiza a data selecionada
+        setSelectedDate(dateText); 
       }
     });
 
@@ -73,7 +70,7 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
         const token = localStorage.getItem("token");
         const response = await axios.get('http://localhost:5000/api/apontamento',
           { headers: { Authorization: `Bearer ${token}` } });
-        setData(response.data); // Define os dados recebidos do servidor
+        setData(response.data); 
       } catch (error) {
         console.error("Houve um erro ao buscar os dados:", error);
       }
@@ -100,14 +97,12 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
         headers: { Authorization: `Bearer ${token}` }
       };
       await axios.delete(`http://localhost:5000/api/apontamento/${apontamento.id}`, config);
-      // Recarregar os dados após a exclusão
       const response = await axios.get('http://localhost:5000/api/apontamento', config);
       setData(response.data);
     } catch (error) {
       console.error("Erro ao excluir apontamento:", error);
     }
   };
-
 
   const handleEditFormChange = (e: React.ChangeEvent<HTMLInputElement | HTMLTextAreaElement>) => {
     const { name, value } = e.target;
@@ -126,7 +121,6 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
       setEditApontamento(null);
       setEditFormData({ data: '', entrada: '', saida: '', atividade: '' });
       onClose();
-      // Recarregar os dados após a edição
       const response = await axios.get('http://localhost:5000/api/apontamento', config);
       setData(response.data);
     } catch (error) {
@@ -134,7 +128,6 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
     }
   };
 
-  // Função para formatar a data no mesmo formato usado no datepicker (MM/DD/YYYY)
   const formatDate = (dateString: string) => {
     const date = new Date(dateString);
     const utcDate = new Date(date.getUTCFullYear(), date.getUTCMonth(), date.getUTCDate());
@@ -144,58 +137,54 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
     return `${month}/${day}/${year}`;
   };
 
-  // Filtra os apontamentos de acordo com a data selecionada
   const filteredData = selectedDate ? data.filter(item => formatDate(item.data) === selectedDate) : [];
 
   return (
     <>
       <Center>
-        {filteredData.length > 0 && (
-          <Card>
-            <CardHeader>
-              <Heading size="md">Apontamento</Heading>
-            </CardHeader>
-            <CardBody>
-              <Stack divider={<StackDivider />} spacing="7">
-                {filteredData.map((filteredItem) => (
-                  <Box
-                    key={filteredItem.id}
-                    display="flex"
-                    alignItems="center"
-                    gap="2"
-                  >
-                    <Text>
-                      {filteredItem.atividade} -{" "}  {new Date(filteredItem.data).toLocaleDateString("pt-BR", {timeZone: "UTC",})}{" "}
-                      - {filteredItem.entrada} - {filteredItem.saida}
-                    </Text>
-                    <button
-                      onClick={() => handleEditClick(filteredItem)}
-                      title="Edit"
-                    > <Icon as={FaEdit} />
-                    </button>
-                    <button   onClick={() => deleteApontamento(filteredItem)} title="Delete"> <Icon as={FaTrash} /> </button>
-                  </Box>
-                ))}
-              </Stack>
-            </CardBody>
-          </Card>
-        )}
-      </Center>
-      <Center>
-        <p id="texto"></p>
-      </Center>
-      <div className="calendar-container">
-        <Center>
-          <Box w="full" maxW="1200px" textAlign="left">
-            <h1>Apontamentos</h1>
-          </Box>
-        </Center>
-        <Center>
-          <Box w="full" maxW="1200px" textAlign="left">
+        <div className="calendar-container">
+          <Box w="full" maxW="600px" textAlign="left">
             <div id="datepicker"></div>
           </Box>
-        </Center>
-      </div>
+          <Box w="full" maxW="600px" textAlign="left" className="table-container">
+            {filteredData.length > 0 && (
+              <Box>
+                <Heading as="h2" size="md" mb={4}>Apontamentos</Heading>
+                <Table variant="simple">
+                  <Thead>
+                    <Tr>
+                      <Th>Data</Th>
+                      <Th>Entrada</Th>
+                      <Th>Saída</Th>
+                      <Th>Atividade</Th>
+                      <Th>Editar</Th>
+                      <Th>Excluir</Th>
+                    </Tr>
+                  </Thead>
+                  <Tbody>
+                    {filteredData.map((filteredItem) => (
+                      <Tr key={filteredItem.id}>
+                        <Td>{new Date(filteredItem.data).toLocaleDateString("pt-BR", { timeZone: "UTC" })}</Td>
+                        <Td>{filteredItem.entrada}</Td>
+                        <Td>{filteredItem.saida}</Td>
+                        <Td>{filteredItem.atividade}</Td>
+                        <Td><Button size="sm" onClick={() => handleEditClick(filteredItem)} title="Edit">
+                            <Icon as={FaEdit} />
+                          </Button> </Td>
+                        <Td>
+                          <Button size="sm" onClick={() => deleteApontamento(filteredItem)} title="Delete" ml={2}>
+                            <Icon as={FaTrash} />
+                          </Button>
+                        </Td>
+                      </Tr>
+                    ))}
+                  </Tbody>
+                </Table>
+              </Box>
+            )}
+          </Box>
+        </div>
+      </Center>
 
       {isOpen && (
         <Modal

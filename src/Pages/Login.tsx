@@ -1,8 +1,10 @@
-// src/components/Login.tsx
-import React, { useState } from 'react';
+import React, { useContext, useState } from 'react';
 import axios from 'axios';
 import { Box, Button, Center, FormControl, Input, VStack, Text, Link } from '@chakra-ui/react';
 import { useNavigate } from 'react-router-dom';
+import { AppContext } from '../Components/AppContext';
+import { changeLocalStorage } from "../services/storage";
+
 
 
 const Login: React.FC = () => {
@@ -10,15 +12,21 @@ const Login: React.FC = () => {
   const [password, setPassword] = useState('');
   const [emailExists, setEmailExists] = useState('');
   const navigate = useNavigate();
+  const { setisLoggedIn } = useContext(AppContext)
 
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
       const response = await axios.post('http://localhost:5000/api/login', { email, password });
       const { token } = response.data;
+
+      const decodedToken = JSON.parse(atob(token.split('.')[1]));
+      const userName = decodedToken.name;
       localStorage.setItem('token', token);
+      localStorage.setItem('userName', userName);
       navigate('/apontamento');
-      console.log(response.data);
+      setisLoggedIn(true)
+      changeLocalStorage({ login: true})
     } catch (error: any) {
         if (error.response.status === 404 || error.response.status === 401) {
           setEmailExists('Usuario ou senha incorreto');

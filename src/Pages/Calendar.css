@@ -1,9 +1,14 @@
-/* src/components/Calendar.css */
-
 .calendar-container {
-  padding: 20px;
-    
-  border-radius: 4px;
+  display: flex;
+  flex-direction: row;
+  align-items: flex-start;
 }
 
+.table-container {
+  margin-left: 20px; 
+}
+
+#datepicker {
+  margin: 0;
+}
 

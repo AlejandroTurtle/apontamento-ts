@@ -1,4 +1,3 @@
-// src/components/Register.tsx
 import React, { useState } from 'react';
 import axios from 'axios';
 import { Box, Button, Center, FormControl, Input, VStack, Text, Link  } from '@chakra-ui/react';
