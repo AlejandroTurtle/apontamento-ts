@@ -123,7 +123,7 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
       setEditApontamento(null);
       setEditFormData({ data: '', entrada: '', saida: '', atividade: '' });
       onClose();
-      const response = await axios.get(`${baseUrl}/apontamento`, config);
+      const response = await axios.get(`${baseUrl}/api/apontamento`, config);
       setData(response.data);
     } catch (error) {
       console.error("Erro ao editar apontamento:", error);
