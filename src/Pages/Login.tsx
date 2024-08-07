@@ -14,10 +14,13 @@ const Login: React.FC = () => {
   const navigate = useNavigate();
   const { setisLoggedIn } = useContext(AppContext)
 
+  const baseUrl = "https://api-apontamento.vercel.app"
+
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post('http://localhost:5000/api/login', { email, password });
+      const response = await axios.post(`${baseUrl}/api/login`, { email, password });
       const { token } = response.data;
 
       const decodedToken = JSON.parse(atob(token.split('.')[1]));

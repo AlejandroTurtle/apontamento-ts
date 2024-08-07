@@ -47,6 +47,9 @@ const Apontamento: React.FC = () => {
   const [refresh, setRefresh] = useState(false);
   const [apontamentoExists, setApontamentoExists] = useState("");
 
+
+  const baseUrl = "https://api-apontamento.vercel.app"
+
   const validaSaida = (value: string) => {
     const { entrada } = getValues();
     if (value <= entrada) {
@@ -102,10 +105,11 @@ const Apontamento: React.FC = () => {
         headers: { Authorization: `Bearer ${token}` }
       };
 
-      const response = await axios.post("http://localhost:5000/api/apontamento", forma, config);
+      const response = await axios.post(`${baseUrl}/api/apontamento`, forma, config);
       setRefresh(prev => !prev); 
       onClose();
       reset();
+      console.log(response.data);
     } catch (error: any) {
       if (error.response.status === 400) {
         setApontamentoExists(error.response.data.message);

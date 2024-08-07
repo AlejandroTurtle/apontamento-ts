@@ -13,10 +13,12 @@ const Register: React.FC = () => {
   const [emailExists, setEmailExists] = useState("");
   const navigate = useNavigate();
 
+  const baseUrl = "https://api-apontamento.vercel.app"
+
   const handleSubmit = async (e: React.FormEvent) => {
     e.preventDefault();
     try {
-      const response = await axios.post("http://localhost:5000/api/register", {
+      const response = await axios.post(`${baseUrl}/api/register`, {
         name,
         email,
         password,

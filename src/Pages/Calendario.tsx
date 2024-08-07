@@ -58,6 +58,8 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
 
   const { isOpen, onOpen, onClose } = useDisclosure();
 
+  const baseUrl = "https://api-apontamento.vercel.app"
+
   useEffect(() => {
     $("#datepicker").datepicker({
       onSelect: function (dateText) {
@@ -68,7 +70,7 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
     const fetchData = async () => {
       try {
         const token = localStorage.getItem("token");
-        const response = await axios.get('http://localhost:5000/api/apontamento',
+        const response = await axios.get(`${baseUrl}/api/apontamento`,
           { headers: { Authorization: `Bearer ${token}` } });
         setData(response.data); 
       } catch (error) {
@@ -96,8 +98,8 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
       const config = {
         headers: { Authorization: `Bearer ${token}` }
       };
-      await axios.delete(`http://localhost:5000/api/apontamento/${apontamento.id}`, config);
-      const response = await axios.get('http://localhost:5000/api/apontamento', config);
+      await axios.delete(`${baseUrl}/api/apontamento/${apontamento.id}`, config);
+      const response = await axios.get(`${baseUrl}/api/apontamento`, config);
       setData(response.data);
     } catch (error) {
       console.error("Erro ao excluir apontamento:", error);
@@ -117,11 +119,11 @@ const Calendario: React.FC<CalendarioProps> = ({ refresh }) => {
       const config = {
         headers: { Authorization: `Bearer ${token}` }
       };
-      await axios.put(`http://localhost:5000/api/apontamento/${editApontamento.id}`, editFormData, config);
+      await axios.put(`${baseUrl}/api/apontamento/${editApontamento.id}`, editFormData, config);
       setEditApontamento(null);
       setEditFormData({ data: '', entrada: '', saida: '', atividade: '' });
       onClose();
-      const response = await axios.get('http://localhost:5000/api/apontamento', config);
+      const response = await axios.get(`${baseUrl}/apontamento`, config);
       setData(response.data);
     } catch (error) {
       console.error("Erro ao editar apontamento:", error);
